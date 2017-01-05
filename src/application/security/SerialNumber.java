@@ -38,7 +38,7 @@ public class SerialNumber {
 		      input.close();
 		    }
 		    catch(Exception e){
-		    	alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", null, ExceptionUtils.getStackTrace(e));
+		    	alertMsg.alertMsg(AlertType.ERROR, "Bilanci", null, ExceptionUtils.getStackTrace(e));
 		    }
 		    return result.trim();
 		  }

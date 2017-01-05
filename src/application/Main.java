@@ -26,7 +26,7 @@ public class Main extends Application {
 			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch (Exception e) {
-			alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", null, ExceptionUtils.getStackTrace(e));
+			alertMsg.alertMsg(AlertType.ERROR, "Bilanci", null, ExceptionUtils.getStackTrace(e));
 		}
 	}
 

@@ -2,20 +2,21 @@ package application.genInfo;
 
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class GeneralInfo {
 
-	private String dataFatures;
-	private String dataAktuale;
-	private String kohevonesa;
+	private Date dataFatures;
+	private Date dataAktuale;
+	private Integer kohevonesa;
 	private String firma;
 	private String idCard;
 	private String nipt;
 	private String perfaqesuesi;
 	private BigDecimal totaliPlote;
 	
-	public GeneralInfo(String dataFatures, String dataAktuale, String kohevonesa, String firma, String idCard,
-			String nipt, String perfaqesuesi, BigDecimal totaliPlote) {
+	public GeneralInfo(Date dataFatures, Date dataAktuale, Integer kohevonesa, String firma, String idCard, String nipt,
+			String perfaqesuesi, BigDecimal totaliPlote) {
 		super();
 		this.dataFatures = dataFatures;
 		this.dataAktuale = dataAktuale;
@@ -26,22 +27,22 @@ public class GeneralInfo {
 		this.perfaqesuesi = perfaqesuesi;
 		this.totaliPlote = totaliPlote;
 	}
-	public String getDataFatures() {
+	public Date getDataFatures() {
 		return dataFatures;
 	}
-	public void setDataFatures(String dataFatures) {
+	public void setDataFatures(Date dataFatures) {
 		this.dataFatures = dataFatures;
 	}
-	public String getDataAktuale() {
+	public Date getDataAktuale() {
 		return dataAktuale;
 	}
-	public void setDataAktuale(String dataAktuale) {
+	public void setDataAktuale(Date dataAktuale) {
 		this.dataAktuale = dataAktuale;
 	}
-	public String getKohevonesa() {
+	public Integer getKohevonesa() {
 		return kohevonesa;
 	}
-	public void setKohevonesa(String kohevonesa) {
+	public void setKohevonesa(Integer kohevonesa) {
 		this.kohevonesa = kohevonesa;
 	}
 	public String getFirma() {
@@ -74,6 +75,8 @@ public class GeneralInfo {
 	public void setTotaliPlote(BigDecimal totaliPlote) {
 		this.totaliPlote = totaliPlote;
 	}
+	
+	
 	
 	
 }

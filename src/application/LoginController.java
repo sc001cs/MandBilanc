@@ -44,24 +44,18 @@ public class LoginController implements Initializable {
 		} else if(tfPassword.getText().equals("1")) {
 		// } else if(tfPassword.getText().equals(catchIt())) {
 
-			/**
-			 * Set up all the folders and file if not exist
-			 * */
-			SetUpFolders suf = new SetUpFolders();
-			suf.setUpTheFolders();
-			
 			try {
 	
 				((Node)event.getSource()).getScene().getWindow().hide();
 				Stage desktop = new Stage();
 				Parent root = FXMLLoader.load(getClass().getResource("/application/desktop/Desktop.fxml"));
-				Scene scene = new Scene(root, 750, 500);
+				Scene scene = new Scene(root, 750, 270);
 				scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 				desktop.setScene(scene);
 				desktop.setResizable(false);
 				desktop.show();
 			} catch (Exception e) {
-				alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", null, ExceptionUtils.getStackTrace(e));
+				alertMsg.alertMsg(AlertType.ERROR, "Bilanci", null, ExceptionUtils.getStackTrace(e));
 			}
 			
 			tfID.setText("");

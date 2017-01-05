@@ -37,7 +37,7 @@ public class ConfigFileExcel {
 			data = Files.readAllBytes(path);
 		} catch (IOException e) {
 			
-			alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", "Template Excel me emer: " + pathExcel + " nuk u gjen!", null);
+			alertMsg.alertMsg(AlertType.ERROR, "Bilanci", "Template Excel me emer: " + pathExcel + " nuk u gjen!", null);
 		}
 
 		return data;

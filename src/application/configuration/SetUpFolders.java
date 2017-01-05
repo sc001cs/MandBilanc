@@ -53,7 +53,7 @@ public class SetUpFolders {
 			StreamResult result =  new StreamResult(new File(ConfigExcel.configFolder + "\\" + "config.xml"));
 			transformer.transform(source, result);
 		} catch(Exception e) {
-			alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", null, ExceptionUtils.getStackTrace(e));
+			alertMsg.alertMsg(AlertType.ERROR, "Bilanci", null, ExceptionUtils.getStackTrace(e));
 		}
 		
 	}

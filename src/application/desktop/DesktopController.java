@@ -62,20 +62,10 @@ public class DesktopController implements Initializable {
 
 	@FXML private Button btnUploadExcel;
 	@FXML private Button btnSignOut;
-	@FXML private TextField tfFilter;
-	@FXML private Button btnClearFilter;
-	
-	@FXML private TableView<FileExcel> listXMLTable;
-	@FXML private TableColumn<FileExcel, String> pathCol;
-	@FXML private TableColumn<FileExcel, String> dateCol;
-//	@FXML private TableColumn<FileXML, String> absPathCol;
-	@FXML private TableColumn<FileExcel, String> editRowCol;
-	@FXML private TableColumn<FileExcel, String> deleteRowCol;
 	
 	StartElaboration startElab = new StartElaboration();
 //	GenerateXMLFINAL genXML = new GenerateXMLFINAL();
 	ConfigFileExcel configFileExcel = new ConfigFileExcel();
-	ConfigExcel configExcel = configFileExcel.getConfigXML();
 	AlertMsg alertMsg = new AlertMsg();
 	
 	public static HashMap<String, List<String>> alerts = new HashMap<String, List<String>>();
@@ -104,318 +94,23 @@ public class DesktopController implements Initializable {
 
 			try {
 				alerts = new HashMap<String, List<String>>();
-				
 				startElab.start(fileExcel.getAbsolutePath());
-			//	genXML.startGeneration(fileExcel.getAbsolutePath(), pathFolder);
 				
-				addItemXMLToListAndRefresh(pathFolder);
-				
-				validationProcessCovert();
-				
-			} catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
-				alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", null, ExceptionUtils.getStackTrace(e));
-			}
-		} else {
-			alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", "File nuk u aksesua!", null);
-		}
-	}
-
-	private void addItemXMLToListAndRefresh(String pathFolder) {
-
-		// Absolute path and Path
-		HashMap<String, String> listXMLFilesPath = new HashMap<String, String>();
-		if(pathFolder != null && !pathFolder.trim().equals("")) {
-
-			File folder = new File(pathFolder);
-			File[] listOfFiles = folder.listFiles();
-
-			for (int i = 0; i < listOfFiles.length; i++) {
-				if (listOfFiles[i].isFile()) {
-					listXMLFilesPath.put(listOfFiles[i].getAbsolutePath(), listOfFiles[i].getName());
-				}
+				alertMsg.alertMsg(AlertType.ERROR, "Bilanci", null, ExceptionUtils.getStackTrace(e));
 			}
 
 		} else {
-			System.err.println("ERROR FOLDER NOT FOUND");
-			alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", "Sistemi nuk mund te krijoje folderin " + pathFolder, null);
+			alertMsg.alertMsg(AlertType.ERROR, "Bilanci", "File nuk u aksesua!", null);
 		}
-
-		List<FileExcel> listXML = new ArrayList<FileExcel>();
-		
-		for (String absPathXMLStr : listXMLFilesPath.keySet()) {
-			
-			Path pathXML = Paths.get(absPathXMLStr);
-			
-			BasicFileAttributes attr = null;
-			try {
-				attr = Files.readAttributes(pathXML, BasicFileAttributes.class);
-				
-				FileExcel xml = new FileExcel(listXMLFilesPath.get(absPathXMLStr), absPathXMLStr, convertFiletimeToDate(attr.creationTime()) );
-				listXML.add(xml);
-				
-			} catch (IOException e) {
-				alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", null, ExceptionUtils.getStackTrace(e));
-			}
-			
-		}
-
-		if(listXML != null && listXML.size() > 0) {
-
-			Collections.sort(listXML, new Comparator<FileExcel>() {
-				@Override
-				public int compare(final FileExcel object1, final FileExcel object2) {
-					return object2.getCreatedDate().compareTo(object1.getCreatedDate());
-				}
-			});
-			
-			ObservableList<FileExcel> listTableFileXML = FXCollections.observableArrayList(listXML);
-			
-			initFilter(listTableFileXML);
-			btnClearFilter.setOnAction(e -> tfFilter.setText(""));
-			
-			pathCol.setCellValueFactory(new PropertyValueFactory<FileExcel, String>("path"));
-			dateCol.setCellValueFactory(new PropertyValueFactory<FileExcel, String>("createdDate"));
-		//	absPathCol.setCellValueFactory(new PropertyValueFactory<FileXML, String>("absPathCol"));
-			editRowCol.setCellValueFactory(new PropertyValueFactory<FileExcel, String>("deleteRowCol"));
-			editRowCol.setCellFactory( renderEditFile() );
-			
-			deleteRowCol.setCellValueFactory(new PropertyValueFactory<FileExcel, String>("deleteRowCol"));
-			deleteRowCol.setCellFactory( renderDeleteFile() );
-
-			
-			//Add click listener
-			listXMLTable.setRowFactory( tv -> {
-			    TableRow<FileExcel> row = new TableRow<>();
-			    row.setOnMouseClicked(event -> {
-			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-			        	FileExcel rowData = row.getItem();
-			            Path path = Paths.get(rowData.getAbsolutePath());
-						try {
-							Runtime.getRuntime().exec("explorer.exe /select," + path);
-						} catch (IOException e) {
-							alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", "File " + rowData.getPath() + "nuk gjendet ne folder", null);
-						}
-			        }
-			    });
-			    return row ;
-			});
-			
-			listXMLTable.setItems(listTableFileXML);
-		} else if(listXML != null && listXML.size() == 0) {
-			ObservableList<FileExcel> listTableFileXML = FXCollections.observableArrayList(listXML);
-			listXMLTable.setItems(listTableFileXML);
-		}
-		
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		/**
-		 * Create the Folder if not exist and add the file generated
-		 * */
-		String pathTemp = "";
-		if(configExcel != null && configExcel.getGeneral() != null 
-				&& configExcel.getGeneral().getPath_folder_excel() != null) {
-			pathTemp = configExcel.getGeneral().getPath_folder_excel();
-		}
-		File file = new File(pathTemp);
-        if (!file.exists()) {
-            if (file.mkdir()) {
-                // System.out.println("Directory is created!");
-            	pathFolder = configExcel.getGeneral().getPath_folder_excel();
-            } else {
-                // System.out.println("Failed to create directory!");
-                pathFolder = "C:\\AsycudaConvert";
-            }
-        } else {
-        	pathFolder = pathTemp;
-        }
-		
-        addItemXMLToListAndRefresh(pathFolder);
 	}
 
-	private String convertFiletimeToDate(FileTime fileTime) {
-
-		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy kk:mm");
-		String dateCreatedStr = df.format(fileTime.toMillis());
-
-		return dateCreatedStr;
-	}
-	
-	private void validationProcessCovert() {
-		
-		if(alerts.isEmpty()) {
-			alertMsg.alertMsg(AlertType.INFORMATION, "Asycuda Converter", "File i konvertuar me sukses!", null);
-		} else if(alerts.containsKey(AlertMsg.WARNING)) {
-			
-			String alertMessage = "File i konvertuar me sukses!\n";
-			for (String msg : alerts.get(AlertMsg.WARNING)) {
-				alertMessage += msg + "\n"; 
-			}
-			alertMsg.alertMsg(AlertType.INFORMATION, "Asycuda Converter", alertMessage, null);
-		}
-	}
-	
-	private Callback<TableColumn<FileExcel, String>, TableCell<FileExcel, String>> renderEditFile() {
-
-		Callback<TableColumn<FileExcel, String>, TableCell<FileExcel, String>> cellFactory = 
-				new Callback<TableColumn<FileExcel, String>, TableCell<FileExcel, String>>() {
-			@Override
-			public TableCell call( final TableColumn<FileExcel, String> param ) {
-				final TableCell<FileExcel, String> cell = new TableCell<FileExcel, String>() {
-
-					final Button btnEditFile = new Button( "Modifiko" );
-
-					@Override
-					public void updateItem( String item, boolean empty )
-					{
-						super.updateItem( item, empty );
-						if ( empty )
-						{
-							setGraphic( null );
-							setText( null );
-						}
-						else
-						{
-							btnEditFile.setOnAction( ( ActionEvent event ) ->
-							{
-								FileExcel fileXML = getTableView().getItems().get( getIndex() );
-								Path pathXML = Paths.get(fileXML.getAbsolutePath());
-
-//								Alert alertDelete = new Alert(AlertType.CONFIRMATION);
-//								alertDelete.setTitle("Deshironi te modifikoni kete file?");
-//								alertDelete.setHeaderText("Emri i file: " + pathXML.getFileName());
-								
-								String[] xmlNameSplit = (pathXML.getFileName().toString()).split("\\.");
-								String xmlNameWithoutExtesion = "";
-								String xmlExtesion = "";
-								if(xmlNameSplit.length == 2) {
-									xmlNameWithoutExtesion = xmlNameSplit[0];
-									xmlExtesion = xmlNameSplit[1];
-								}
-								
-								TextInputDialog dialog = new TextInputDialog(xmlNameWithoutExtesion);
-								dialog.getDialogPane().setPrefSize(450, 250);
-								dialog.setTitle("Asycuda Converter");
-								dialog.setHeaderText("Deshironi te modifikoni kete file?");
-								dialog.setContentText("Modifiko: ");
-
-								// Traditional way to get the response value.
-								Optional<String> result = dialog.showAndWait();
-								if (result.isPresent()){
-									
-									File oldfile = new File(fileXML.getAbsolutePath());
-							//		File newfile = new File(configXML.getGeneral().getPath_folder_xml() + "\\" + result.get() + "." + xmlExtesion);
-									File newfile = oldfile;
-									if(oldfile.renameTo(newfile)){
-										System.out.println("Rename succesful");
-									}else{
-										System.out.println("Rename failed");
-									}
-									
-									alertMsg.alertMsg(AlertType.INFORMATION, "Asycuda Converter", "Emri i file u modifikua me sukses", "Emri i file: " + newfile.getName());
-									try {
-									    //moves mouse to the middle of the screen
-									    new Robot().mouseMove((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 1.9), (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2.53));
-									    //remember to use try-catch block (always, and remember to delete this)
-									} catch (AWTException e) {
-										alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", null, ExceptionUtils.getStackTrace(e));
-									}
-									
-									// Refresh the list
-									addItemXMLToListAndRefresh(pathFolder);
-								}
-							});
-							setGraphic( btnEditFile );
-							setAlignment(getAlignment().CENTER);
-							setText( null );
-						}
-					}
-				};
-				return cell;
-			}
-		};
-
-		return cellFactory;
-	}
-	
-	private Callback<TableColumn<FileExcel, String>, TableCell<FileExcel, String>> renderDeleteFile() {
-
-		Callback<TableColumn<FileExcel, String>, TableCell<FileExcel, String>> cellFactory = 
-				new Callback<TableColumn<FileExcel, String>, TableCell<FileExcel, String>>() {
-			@Override
-			public TableCell call( final TableColumn<FileExcel, String> param ) {
-				final TableCell<FileExcel, String> cell = new TableCell<FileExcel, String>() {
-
-					final Button btnDeleteFile = new Button( "X Fshij" );
-
-					@Override
-					public void updateItem( String item, boolean empty )
-					{
-						super.updateItem( item, empty );
-						if ( empty )
-						{
-							setGraphic( null );
-							setText( null );
-						}
-						else
-						{
-							btnDeleteFile.setOnAction( ( ActionEvent event ) ->
-							{
-								FileExcel fileXML = getTableView().getItems().get( getIndex() );
-								Path pathXML = Paths.get(fileXML.getAbsolutePath());
-
-								Alert alertDelete = new Alert(AlertType.CONFIRMATION);
-								alertDelete.setTitle("Deshironi te fshini kete file?");
-								alertDelete.setHeaderText("Emri i file: " + pathXML.getFileName());
-								
-								try {
-								    //moves mouse to the middle of the screen
-								    new Robot().mouseMove((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 1.9), (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2.53));
-								    //remember to use try-catch block (always, and remember to delete this)
-								} catch (AWTException e) {
-								    e.printStackTrace();
-								}
-								
-								Optional<ButtonType> result = alertDelete.showAndWait();
-								if (result.get() == ButtonType.OK){
-									// ... user chose OK
-								
-									try {
-									    Files.delete(pathXML);
-									} catch (NoSuchFileException x) {
-										alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", "File: " + pathXML.getFileName() + " nuk ekziston\n" +
-														ExceptionUtils.getStackTrace(x), null);
-									} catch (DirectoryNotEmptyException x) {
-										alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", "Folderi nuk ekziston\n" +
-												ExceptionUtils.getStackTrace(x), null);
-									} catch (IOException x) {
-									    // File permission problems are caught here.
-										alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", "Nuk keni te drejtat per te fshire kete file: " 
-									    + pathXML.getFileName() +"\n" +
-												ExceptionUtils.getStackTrace(x), null);
-									}
-									// Refresh the list
-									addItemXMLToListAndRefresh(pathFolder);
-									
-								} else {}
-
-							} );
-							setGraphic( btnDeleteFile );
-							setAlignment(getAlignment().CENTER);
-							setText( null );
-						}
-					}
-				};
-				return cell;
-			}
-		};
-
-		return cellFactory;
-	}
-	
 	public void signOut(ActionEvent event) {
 
 		try {
@@ -425,44 +120,13 @@ public class DesktopController implements Initializable {
 			Pane root = loader.load(getClass().getResource("/application/Login.fxml").openStream());
 
 			Scene scene = new Scene(root);
-	//		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
 			
 		} catch (Exception e) {
-			alertMsg.alertMsg(AlertType.ERROR, "Asycuda Converter", null, ExceptionUtils.getStackTrace(e));
+			alertMsg.alertMsg(AlertType.ERROR, "Bilanci", null, ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
-	private void initFilter(ObservableList<FileExcel> listTableFileXML) {
-        tfFilter.textProperty().addListener(new InvalidationListener() {
-
-            @Override
-            public void invalidated(Observable o) {
-                if(tfFilter.textProperty().get().isEmpty()) {
-                	listXMLTable.setItems(listTableFileXML);
-                    return;
-                }
-                ObservableList<FileExcel> tableItems = FXCollections.observableArrayList();
-                ObservableList<TableColumn<FileExcel, ?>> cols = listXMLTable.getColumns();
-                for(int i=0; i<listTableFileXML.size(); i++) {
-                    
-                	//for(int j=0; j<cols.size(); j++) {
-                    for(int j=0; j<1; j++) {
-                        TableColumn col = cols.get(j);
-                        String cellValue = col.getCellData(listTableFileXML.get(i)).toString();
-                        cellValue = cellValue.toLowerCase();
-                        if(cellValue.contains(tfFilter.textProperty().get().toLowerCase())) {
-                            tableItems.add(listTableFileXML.get(i));
-                            break;
-                        }                        
-                    }
-
-                }
-                listXMLTable.setItems(tableItems);
-            }
-        });
-    }
 	
 }
