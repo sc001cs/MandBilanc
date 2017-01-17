@@ -3,24 +3,24 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/commons-codec-1.10.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/commons-collections4-4.1.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/curvesapi-1.04.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/eclipselink.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/log4j-1.2.17.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-3.15.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-examples-3.15.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-excelant-3.15.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-ooxml-3.15.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-ooxml-schemas-3.15.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-scratchpad-3.15.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/xmlbeans-2.6.0.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-common/commons-lang3-3.5.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-common/commons-lang3-3.5-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-common/commons-lang3-3.5-sources.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-common/commons-lang3-3.5-tests.jar"/>
-	<classpathentry kind="lib" path="C:/EclipseWork/workspace/MandBilance/libs/poi-common/commons-lang3-3.5-test-sources.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/curvesapi-1.04.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/eclipselink.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-3.15.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-examples-3.15.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-excelant-3.15.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-ooxml-3.15.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-ooxml-schemas-3.15.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-scratchpad-3.15.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-common/commons-lang3-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-common/commons-lang3-3.5-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-common/commons-lang3-3.5-sources.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-common/commons-lang3-3.5-tests.jar"/>
+	<classpathentry kind="lib" path="C:/ElicpseWork/workspace/MandBilanc/libs/poi-common/commons-lang3-3.5-test-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

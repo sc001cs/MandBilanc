@@ -34,26 +34,23 @@ public class StartElaboration {
 	private static Integer B2B_SHEET = 12;
 	private static Integer INDIV_SHEET = 13;
 	
-	public static Integer ROW_START = 4;
-	public static Integer ROW_START_FINAL = 4;
+	public static Integer ROW_START = 3;
+	public static Integer ROW_START_FINAL = 3;
 	
 	public static Integer ROW_START_BUSINESS = 3;
 	public static Integer ROW_START_INDIVIDUAL = 3;
 	public static Integer ROW_START_BUSS_INDIVID = 3;
 	
-	public static Integer COL_DATA_FATURES = 0;
-	public static Integer COL_DATA_AKTUALE = 1;
-	public static Integer COL_KOHEVONESA = 2;
-	public static Integer COL_FIRMA = 3;
-	public static Integer COL_ID_CARD = 4;
-	public static Integer COL_NIPT = 5;
-	public static Integer COL_PERFAQESUESI = 6;
-	public static Integer COL_TOTALI = 45;
+	public static Integer COL_FIRMA = 0;
+	public static Integer COL_ID_CARD = 1;
+	public static Integer COL_NIPT = 2;
+	public static Integer COL_PERFAQESUESI = 3;
+	public static Integer COL_TOTALI = 42;
 	
-	public static Integer COL_NIPT_IDCARD_FINAL = 4;
-	
-	public static Integer COL_TOTALI_FINAL_BUSINESS = 6;
-	public static Integer COL_TOTALI_FINAL_INDIVIDUAL = 6;
+	public static Integer COL_NIPT_IDCARD_FINAL = 1;
+	public static Integer COL_PERFAQESUESI_B2B_INDIVIDUAL =2;
+	public static Integer COL_TOTALI_FINAL_BUSINESS = 3;
+	public static Integer COL_TOTALI_FINAL_INDIVIDUAL = 3;
 	
 	public static String WARNING = "WARNING";
 	public static String ERROR = "ERROR";
@@ -95,27 +92,6 @@ public class StartElaboration {
 
 				System.out.println("Rreshti: " + ROW_START);
 				
-				Date dataFatures = ExcelPoi.getDate(row, COL_DATA_FATURES);
-				if(dataFatures == null) {
-					if(listErrors.containsKey(WARNING)) {
-						listErrors.get(WARNING).add("Mungon data e fatures tek sheet: " + (START_SHEET+1) + " rreshti: " + (ROW_START+1));
-					} else {
-						listStringWarning.add("Mungon data e fatures tek sheet: " + (START_SHEET+1) + " rreshti: " + (ROW_START+1));
-						listErrors.put(WARNING, listStringWarning);
-					}
-				}
-				
-				Date dataAktuale = ExcelPoi.getDate(row, COL_DATA_AKTUALE);
-				if(dataAktuale == null) {
-					if(listErrors.containsKey(WARNING)) {
-						listErrors.get(WARNING).add("Mungon data aktuale tek sheet: " + (START_SHEET+1) + " rreshti: " + (ROW_START+1));
-					} else {
-						listStringWarning.add("Mungon data aktuale tek sheet: " + (START_SHEET+1) + " rreshti: " + (ROW_START+1));
-						listErrors.put(WARNING, listStringWarning);
-					}
-				}
-				
-				Integer kohevonesa = ExcelPoi.getInteger(row, COL_KOHEVONESA);
 				String firma = ExcelPoi.getString(row, COL_FIRMA);
 				String idCard = ExcelPoi.getString(row, COL_ID_CARD) == null ? null : ExcelPoi.getString(row, COL_ID_CARD).toUpperCase();
 				String nipt = ExcelPoi.getString(row, COL_NIPT) == null ? null : ExcelPoi.getString(row, COL_NIPT).toUpperCase();
@@ -159,7 +135,7 @@ public class StartElaboration {
 						totailGI = new BigDecimal(totali);	
 					}
 					
-					GeneralInfo genInfo = new GeneralInfo(dataFatures, dataAktuale, kohevonesa, firma, idCard, nipt, perfaqesuesi, totailGI);
+					GeneralInfo genInfo = new GeneralInfo(firma, idCard, nipt, perfaqesuesi, totailGI);
 
 					listClients.put(key, genInfo);
 				}
@@ -196,21 +172,6 @@ public class StartElaboration {
 				
 				if(rowB2B == null) continue;
 				if(rowIndivid == null) continue;
-				
-				Cell cellDataFatures = rowB2B.getCell(COL_DATA_FATURES);
-				cellDataFatures.setCellValue("");
-				Cell cellDataFatures2 = rowIndivid.getCell(COL_DATA_FATURES);
-				cellDataFatures2.setCellValue("");
-
-				Cell cellDataAktuale = rowB2B.getCell(COL_DATA_AKTUALE);
-				cellDataAktuale.setCellValue("");
-				Cell cellDataAktuale2 = rowIndivid.getCell(COL_DATA_AKTUALE);
-				cellDataAktuale2.setCellValue("");
-
-				Cell cellKohevonesa = rowB2B.getCell(COL_KOHEVONESA);
-				cellKohevonesa.setCellValue("");
-				Cell cellKohevonesa2 = rowIndivid.getCell(COL_KOHEVONESA);
-				cellKohevonesa2.setCellValue("");
 
 				Cell cellFirma = rowB2B.getCell(COL_FIRMA);
 				cellFirma.setCellValue("");
@@ -222,9 +183,9 @@ public class StartElaboration {
 				Cell cellNiptOrIdCard2 = rowIndivid.getCell(COL_NIPT_IDCARD_FINAL);
 				cellNiptOrIdCard2.setCellValue("");
 
-				Cell cellPerfaqesuesi = rowB2B.getCell(COL_PERFAQESUESI);
+				Cell cellPerfaqesuesi = rowB2B.getCell(COL_PERFAQESUESI_B2B_INDIVIDUAL);
 				cellPerfaqesuesi.setCellValue("");
-				Cell cellPerfaqesuesi2 = rowIndivid.getCell(COL_PERFAQESUESI);
+				Cell cellPerfaqesuesi2 = rowIndivid.getCell(COL_PERFAQESUESI_B2B_INDIVIDUAL);
 				cellPerfaqesuesi2.setCellValue("");
 
 				Cell cellTotaliPlote = rowB2B.getCell(COL_TOTALI_FINAL_BUSINESS);
@@ -246,15 +207,6 @@ public class StartElaboration {
 				} else {
 					continue;
 				}
-
-				Cell cellDataFatures = row.getCell(COL_DATA_FATURES);
-				cellDataFatures.setCellValue(genInfo.getDataFatures());
-
-				Cell cellDataAktuale = row.getCell(COL_DATA_AKTUALE);
-				cellDataAktuale.setCellValue(genInfo.getDataAktuale());
-
-				Cell cellKohevonesa = row.getCell(COL_KOHEVONESA);
-				cellKohevonesa.setCellValue(genInfo.getKohevonesa());
 
 				Cell cellFirma = row.getCell(COL_FIRMA);
 				cellFirma.setCellValue(genInfo.getFirma());
